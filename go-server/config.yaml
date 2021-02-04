@@ -1,0 +1,2 @@
+mongodbURI: "mongodb://jan:dupa@192.168.1.100:27017/mempage"
+cookie_duration_in_seconds: 600
