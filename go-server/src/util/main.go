@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func RunEvery(foo func(), duration time.Duration) chan struct{} {
+func RunEvery(duration time.Duration, foo func()) chan struct{} {
 	ticker := time.NewTicker(duration)
 	quit := make(chan struct{})
 
@@ -43,7 +43,6 @@ func EnableCors(w *http.ResponseWriter, r *http.Request) bool {
 
 func exampleMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Our middleware logic goes here...
 		next.ServeHTTP(w, r)
 	})
 }

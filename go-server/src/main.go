@@ -13,11 +13,11 @@ import (
 
 type tinyHandler struct{}
 
-func (tinyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if util.EnableCors(&w, r) {
+func (tinyHandler) ServeHTTP(writer http.ResponseWriter, req *http.Request) {
+	if util.EnableCors(&writer, req) {
 		return
 	}
-	http.DefaultServeMux.ServeHTTP(w, r)
+	http.DefaultServeMux.ServeHTTP(writer, req)
 }
 
 var sessions *session.T

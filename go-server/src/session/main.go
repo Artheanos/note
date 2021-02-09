@@ -89,7 +89,7 @@ func (sessions T) LoggedIn(handler HandlerFunc) HandlerFunc {
 func Init(cookieDuration int) *T {
 	var result T
 	result.Data = make(map[string]*SingleSession)
-	result.quit = util.RunEvery(result.clearSessions, 10*time.Second)
+	result.quit = util.RunEvery(time.Minute, result.clearSessions)
 	result.cookieDuration = time.Duration(cookieDuration)
 	return &result
 }
