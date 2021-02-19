@@ -31,7 +31,7 @@ func main() {
 	http.HandleFunc("/api/note", note)
 	http.HandleFunc("/api/logout", logout)
 
-	http.Handle("/static", http.FileServer(http.Dir("./js-build/static")))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./js-build/static"))))
 	http.HandleFunc("/", func(writer http.ResponseWriter, req *http.Request) {
 		http.ServeFile(writer, req, "./js-build/index.html")
 	})
