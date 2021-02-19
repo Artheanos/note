@@ -6,7 +6,6 @@ import (
 	"mainpkg/config"
 	"mainpkg/mydb"
 	"mainpkg/session"
-	"mainpkg/util"
 	"net/http"
 	"os"
 )
@@ -14,9 +13,6 @@ import (
 type tinyHandler struct{}
 
 func (tinyHandler) ServeHTTP(writer http.ResponseWriter, req *http.Request) {
-	if util.EnableCors(&writer, req) {
-		return
-	}
 	http.DefaultServeMux.ServeHTTP(writer, req)
 }
 
@@ -31,18 +27,24 @@ func main() {
 
 	defer sessions.Close()
 
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/note", note)
-	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/api/login", login)
+	http.HandleFunc("/api/note", note)
+	http.HandleFunc("/api/logout", logout)
+
+	http.Handle("/static", http.FileServer(http.Dir("./js-build/static")))
+	http.HandleFunc("/", func(writer http.ResponseWriter, req *http.Request) {
+		http.ServeFile(writer, req, "./js-build/index.html")
+	})
 
 	var PORT string
 	if value, ok := os.LookupEnv("PORT"); ok {
 		PORT = value
 	} else {
-		PORT = "8090"
+		PORT = "3000"
 	}
 
 	fmt.Printf("Serving at %s", PORT)
+
 	if http.ListenAndServe(fmt.Sprintf(":%s", PORT), tinyHandler{}) == nil {
 		log.Fatal("Something happened")
 	}
